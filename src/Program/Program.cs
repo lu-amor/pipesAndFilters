@@ -12,17 +12,20 @@ namespace CompAndDel
             IPicture picture = provider.GetPicture(@"beer.jpg");
 
             PipeNull pnull = new PipeNull();
-            IPicture p1 = pnull.Send(picture);
+            FilterSaveImage resParcial2 = new FilterSaveImage(@"resParcial2.jpg");
+            PipeSerial rp2 = new PipeSerial(resParcial2, pnull);
             FilterNegative negative = new FilterNegative();
-            IFilter ng = negative;
-            PipeSerial serial2 = new PipeSerial(ng, pnull);
-            IPicture s2 = serial2.Send(p1);
+            PipeSerial serial2 = new PipeSerial(negative, rp2);
+            FilterSaveImage resParcial1 = new FilterSaveImage(@"resParcial1.jpg");
+            PipeSerial rp1 = new PipeSerial(resParcial1, serial2);
             FilterGreyscale greyscale = new FilterGreyscale();
-            IFilter gs = greyscale;
-            PipeSerial serial1 = new PipeSerial(gs, serial2);
+            PipeSerial serial1 = new PipeSerial(greyscale, rp1);
+
+            IPicture p1 = pnull.Send(picture);
+            IPicture s2 = serial2.Send(p1);
             IPicture s1 = serial1.Send(s2);
 
-            provider.SavePicture(s1, @"PathToImageToSave.jpg");
+            provider.SavePicture(p1, @"beerEdited.jpg");
         }
     }
 }
