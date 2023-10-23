@@ -16,8 +16,10 @@ namespace CompAndDel
             PipeSerial rp2 = new PipeSerial(resParcial2, pnull);
             FilterNegative negative = new FilterNegative();
             PipeSerial serial2 = new PipeSerial(negative, rp2);
+            FilterTwitter ft = new FilterTwitter(@"resParcial1.jpg", "ej3");
+            PipeSerial t1 = new PipeSerial(ft, serial2);
             FilterSaveImage resParcial1 = new FilterSaveImage(@"resParcial1.jpg");
-            PipeSerial rp1 = new PipeSerial(resParcial1, serial2);
+            PipeSerial rp1 = new PipeSerial(resParcial1, t1);
             FilterGreyscale greyscale = new FilterGreyscale();
             PipeSerial serial1 = new PipeSerial(greyscale, rp1);
 
