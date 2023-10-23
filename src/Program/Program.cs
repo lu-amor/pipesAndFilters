@@ -20,10 +20,10 @@ namespace CompAndDel
             PipeSerial rp1 = new PipeSerial(resParcial1, serial2);
             FilterGreyscale greyscale = new FilterGreyscale();
             PipeSerial serial1 = new PipeSerial(greyscale, rp1);
-
-            IPicture p1 = pnull.Send(picture);
-            IPicture s2 = serial2.Send(p1);
-            IPicture s1 = serial1.Send(s2);
+            
+            IPicture s1 = serial1.Send(picture);
+            IPicture s2 = serial2.Send(s1);
+            IPicture p1 = pnull.Send(s2);
 
             provider.SavePicture(p1, @"beerEdited.jpg");
         }
