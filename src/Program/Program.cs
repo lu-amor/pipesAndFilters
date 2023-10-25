@@ -10,18 +10,19 @@ namespace CompAndDel
         {
             PictureProvider provider = new PictureProvider();
             IPicture picture = provider.GetPicture(@"beer.jpg");
-
-            PipeNull pnull = new PipeNull();
-            FilterSaveImage resParcial2 = new FilterSaveImage(@"resParcial2.jpg");
-            PipeSerial rp2 = new PipeSerial(resParcial2, pnull);
-            FilterNegative negative = new FilterNegative();
-            PipeSerial serial2 = new PipeSerial(negative, rp2);
-            FilterTwitter ft = new FilterTwitter(@"resParcial1.jpg", "ej3");
-            PipeSerial t1 = new PipeSerial(ft, serial2);
-            FilterSaveImage resParcial1 = new FilterSaveImage(@"resParcial1.jpg");
-            PipeSerial rp1 = new PipeSerial(resParcial1, t1);
-            FilterGreyscale greyscale = new FilterGreyscale();
-            PipeSerial serial1 = new PipeSerial(greyscale, rp1);
+            CognitiveFace cog = new CognitiveFace(true, Color.GreenYellow);
+            public bool face;
+            PipeNull pNull = new PipeNull();
+            FilterNegative fNegative = new FilterNegative();
+            PipeSerial pSerial2 = new PipeSerial(negative, pnull);
+            FilterTwitter ftwitter = new FilterTwitter(@"hasFace.jpg", "ej3");
+            PipeSerial pTwitter = new PipeSerial(ft, pnull);
+            FilterConditional fConditional = new FilterConditional(face, "picture1.jpg");
+            PipeConditionalFork pConditional = new PipeConditionalFork(pTwitter, pSerial2);
+            FilterSaveImage fSave1 = new FilterSaveImage("picture1. jpg");
+            PipeSerial pSave1 = new PipeSerial(fSave1, pConditional);
+            FilterGreyscale fGreyscale = new FilterGreyscale();
+            PipeSerial pSerial1 = new PipeSerial(fGreyscale, pConditional);
 
             IPicture s1 = serial1.Send(picture);
 
